@@ -1,6 +1,4 @@
 // single draggable shit
-dragElement(document.getElementById("chatango"));
-
 function dragElement(elmnt) {
   var pos1 = 0,
     pos2 = 0,
@@ -44,3 +42,33 @@ function dragElement(elmnt) {
     document.onmousemove = null;
   }
 }
+
+// mute button shit
+function toggleMuteAudio(e) {
+  let audioel = document.getElementById("audio-element");
+  let mutebtn = document.getElementById("mute-btn");
+  if (audioel.muted) {
+    audioel.muted = false;
+    mutebtn.innerHTML = "Mute";
+  } else {
+    audioel.muted = true;
+    mutebtn.innerHTML = "Unmute";
+  }
+}
+
+// set audio time based on current time since epoch
+function setAudioTime() {
+  let audioel = document.getElementById("audio-element");
+  const duration = audioel.duration;
+  const timestamp = Date.now() / 1000;
+  const audiotime = timestamp % duration;
+  audioel.currentTime = audiotime;
+  audioel.autoplay = true;
+}
+
+// ready?
+window.onload = () => {
+  dragElement(document.getElementById("chatango"));
+  $("#mute-btn").on("click", toggleMuteAudio);
+  setAudioTime();
+};

@@ -13,6 +13,7 @@ body {
   background: url("img/test-bg.jpeg");
   background-size: cover;
   background-repeat: repeat;
+  color: #fff;
 }
 
 main {
@@ -33,4 +34,13 @@ main {
   position: absolute;
   opacity: 0.5;
   z-index: 6;
+}
+
+#audio {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+#mute-btn {
+  cursor: pointer;
 }
