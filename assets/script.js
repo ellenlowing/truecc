@@ -82,48 +82,38 @@ function getAudioMetadata() {
 }
 
 // distorion + pitchshift
-let distortionInput = 0;
-let pitchShiftInput = 0;
-let audio = null;
 let distortionFx, pitchShiftFx;
-let analyser = null;
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-audio = document.querySelector("audio");
-let context;
 let source = null;
 let gainNode = null;
 
-const refreshintvrl = 10;
+const refreshintvrl = 10.0;
 let lastmousex = -1;
 let lastmousey = -1;
 
 function initAudioTone() {
-  context = new AudioContext();
-  analyser = context.createAnalyser();
-  Tone.setContext(context);
-  source = context.createMediaElementSource(audio);
+  let audioel = document.getElementById("audio-element");
+  let source = Tone.getContext().rawContext.createMediaElementSource(audioel);
+  pitchShiftFx = new Tone.PitchShift();
+  distortionFx = new Tone.Distortion();
 
-  gainNode = context.createGain();
-  source.connect(analyser);
-  analyser.connect(gainNode);
-  distortionFx = new Tone.Distortion(distortionInput);
-  pitchShiftFx = new Tone.PitchShift(pitchShiftInput);
-
-  // Use the Tone.connect() helper to connect native AudioNodes with the nodes provided by Tone.js
-  Tone.connect(gainNode, distortionFx);
-  Tone.connect(distortionFx, pitchShiftFx);
-  Tone.connect(pitchShiftFx, context.destination);
+  Tone.connect(source, pitchShiftFx);
+  Tone.connect(pitchShiftFx, distortionFx);
+  Tone.connect(distortionFx, Tone.getContext().destination);
 }
 
 function fxOnMove(e) {
-  let mousex = e.pageX;
-  let mousey = e.pageY;
+  let target = e;
+  if (e.type === "touchmove")
+    target = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+  let mousex = target.clientX;
+  let mousey = target.clientY;
   let xtravel = Math.abs(mousex - lastmousex);
   let ytravel = Math.abs(mousey - lastmousey);
   lastmousex = mousex;
   lastmousey = mousey;
   distortionFx.distortion = xtravel / refreshintvrl;
   pitchShiftFx.pitch = ytravel / refreshintvrl;
+  console.log(xtravel / refreshintvrl, ytravel / refreshintvrl);
 }
 
 // ready?
@@ -132,10 +122,10 @@ window.onload = () => {
   let audioel = document.getElementById("audio-element");
   setAudioTime();
   if (md.mobile()) {
-    $("html").click(async () => {
-      await Tone.start();
-      context.resume();
+    $("#metadata").on("touchstart", async (e) => {
+      Tone.getContext().resume();
       audioel.play();
+      $("#metadata").unbind("touchstart");
     });
   } else {
     audioel.autoplay = true;
@@ -145,5 +135,9 @@ window.onload = () => {
   $("#mute-btn").on("click", toggleMuteAudio);
   getAudioMetadata();
   initAudioTone();
-  $("html").mousemove(fxOnMove);
+  if (md.mobile()) {
+    $(document).on("touchmove", fxOnMove);
+  } else {
+    $(document).mousemove(fxOnMove);
+  }
 };
