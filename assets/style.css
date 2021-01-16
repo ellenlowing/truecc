@@ -12,7 +12,7 @@ html {
 
 body {
   background: url("img/test-bg.jpeg");
-  background-size: cover;
+  background-size: auto 100vh;
   background-repeat: repeat;
   color: #fff;
 }

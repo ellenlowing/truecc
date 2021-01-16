@@ -82,10 +82,56 @@ function getAudioMetadata() {
   });
 }
 
+// distorion + pitchshift
+let distortionInput = 0;
+let pitchShiftInput = 0;
+let audio = null;
+let distortionFx, pitchShiftFx;
+let analyser = null;
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+audio = document.querySelector("audio");
+let context;
+let source = null;
+let gainNode = null;
+
+function initAudioTone() {
+  context = new AudioContext();
+  analyser = context.createAnalyser();
+  Tone.setContext(context);
+  source = context.createMediaElementSource(audio);
+
+  gainNode = context.createGain();
+  source.connect(analyser);
+  analyser.connect(gainNode);
+  // gainNode.connect(context.destination);
+  distortionFx = new Tone.Distortion(distortionInput);
+  pitchShiftFx = new Tone.PitchShift(pitchShiftInput);
+
+  // Use the Tone.connect() helper to connect native AudioNodes with the nodes provided by Tone.js
+  Tone.connect(gainNode, distortionFx);
+  Tone.connect(distortionFx, pitchShiftFx);
+  Tone.connect(pitchShiftFx, context.destination);
+}
+
+const refreshintvrl = 10;
+let lastmousex = -1;
+let lastmousey = -1;
+$("html").mousemove(function (e) {
+  let mousex = e.pageX;
+  let mousey = e.pageY;
+  let xtravel = Math.abs(mousex - lastmousex);
+  let ytravel = Math.abs(mousey - lastmousey);
+  lastmousex = mousex;
+  lastmousey = mousey;
+  distortionFx.distortion = xtravel / refreshintvrl;
+  pitchShiftFx.pitch = ytravel / refreshintvrl;
+});
+
 // ready?
 window.onload = () => {
   dragElement(document.getElementById("chatango"));
   $("#mute-btn").on("click", toggleMuteAudio);
   setAudioTime();
   getAudioMetadata();
+  initAudioTone();
 };
