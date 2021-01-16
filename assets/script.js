@@ -74,8 +74,7 @@ function getAudioMetadata() {
   jsmediatags.read(audiosrc.src, {
     onSuccess: function (tag) {
       const tags = tag.tags;
-      let metadata = document.getElementById("metadata");
-      metadata.innerHTML = `${tags.artist} - ${tags.album}`;
+      $("#metadata span").html(`${tags.artist} - ${tags.album}`);
     },
     onError: function (err) {
       console.log(error.type, error.info);
