@@ -134,6 +134,7 @@ window.onload = () => {
   if (md.mobile()) {
     $("html").click(async () => {
       await Tone.start();
+      context.resume();
       audioel.play();
     });
   } else {
