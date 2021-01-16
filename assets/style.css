@@ -1,0 +1,10 @@
+html,
+body {
+  font-family: "VT323", monospace;
+  font-size: 48px;
+}
+
+#chatango {
+  width: 500px;
+  height: 500px;
+}
