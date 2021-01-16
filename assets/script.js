@@ -49,10 +49,10 @@ function toggleMuteAudio(e) {
   let mutebtn = document.getElementById("mute-btn");
   if (audioel.muted) {
     audioel.muted = false;
-    mutebtn.innerHTML = "Mute";
+    mutebtn.innerHTML = "mute";
   } else {
     audioel.muted = true;
-    mutebtn.innerHTML = "Unmute";
+    mutebtn.innerHTML = "unmute";
   }
 }
 
@@ -66,9 +66,27 @@ function setAudioTime() {
   audioel.autoplay = true;
 }
 
+// grab metadata
+function getAudioMetadata() {
+  let audioel = document.getElementById("audio-element");
+  let audiosrc = document.getElementById("audio-src");
+  let jsmediatags = window.jsmediatags;
+  jsmediatags.read(audiosrc.src, {
+    onSuccess: function (tag) {
+      const tags = tag.tags;
+      let metadata = document.getElementById("metadata");
+      metadata.innerHTML = `${tags.artist} - ${tags.album}`;
+    },
+    onError: function (err) {
+      console.log(error.type, error.info);
+    },
+  });
+}
+
 // ready?
 window.onload = () => {
   dragElement(document.getElementById("chatango"));
   $("#mute-btn").on("click", toggleMuteAudio);
   setAudioTime();
+  getAudioMetadata();
 };

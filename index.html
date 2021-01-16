@@ -19,6 +19,10 @@
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.10/Tone.min.js"
     ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.3/jsmediatags.min.js"
+    ></script>
   </head>
   <body>
     <div id="chatango">
@@ -36,24 +40,15 @@
 
     <div id="audio">
       <audio id="audio-element" loop>
-        <source src="assets/audio/audio.mp3" type="audio/mpeg" />
+        <source id="audio-src" src="assets/audio/audio.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
       <div id="mute-btn">
-        Mute
+        mute
       </div>
     </div>
 
-    <main>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas id enim
-      dui. Cras rutrum mauris at urna euismod molestie. Suspendisse iaculis
-      dictum ante, at sagittis nunc posuere vel. Quisque vitae pharetra lectus.
-      Sed ligula leo, semper at semper sagittis, vehicula sed sapien. Morbi
-      ligula nibh, eleifend sed nisi ac, vestibulum bibendum ligula. Nunc
-      condimentum tincidunt orci eu lacinia. Etiam at massa mollis, commodo
-      metus ac, posuere neque. Mauris volutpat a lorem nec tempus. Nulla sit
-      amet dapibus quam.
-    </main>
+    <div id="metadata"></div>
 
     <script src="assets/script.js" type="text/javascript"></script>
   </body>
