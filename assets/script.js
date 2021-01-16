@@ -63,7 +63,6 @@ function setAudioTime() {
   const timestamp = Date.now() / 1000;
   const audiotime = timestamp % duration;
   audioel.currentTime = audiotime;
-  audioel.autoplay = true;
 }
 
 // grab metadata
@@ -129,9 +128,20 @@ function fxOnMove(e) {
 
 // ready?
 window.onload = () => {
+  const md = new MobileDetect(window.navigator.userAgent);
+  let audioel = document.getElementById("audio-element");
+  setAudioTime();
+  if (md.mobile()) {
+    $("html").click(async () => {
+      await Tone.start();
+      audioel.play();
+    });
+  } else {
+    audioel.autoplay = true;
+  }
+
   dragElement(document.getElementById("chatango"));
   $("#mute-btn").on("click", toggleMuteAudio);
-  setAudioTime();
   getAudioMetadata();
   initAudioTone();
   $("html").mousemove(fxOnMove);
