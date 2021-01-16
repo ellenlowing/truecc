@@ -94,6 +94,10 @@ let context;
 let source = null;
 let gainNode = null;
 
+const refreshintvrl = 10;
+let lastmousex = -1;
+let lastmousey = -1;
+
 function initAudioTone() {
   context = new AudioContext();
   analyser = context.createAnalyser();
@@ -103,7 +107,6 @@ function initAudioTone() {
   gainNode = context.createGain();
   source.connect(analyser);
   analyser.connect(gainNode);
-  // gainNode.connect(context.destination);
   distortionFx = new Tone.Distortion(distortionInput);
   pitchShiftFx = new Tone.PitchShift(pitchShiftInput);
 
@@ -113,10 +116,7 @@ function initAudioTone() {
   Tone.connect(pitchShiftFx, context.destination);
 }
 
-const refreshintvrl = 10;
-let lastmousex = -1;
-let lastmousey = -1;
-$("html").mousemove(function (e) {
+function fxOnMove(e) {
   let mousex = e.pageX;
   let mousey = e.pageY;
   let xtravel = Math.abs(mousex - lastmousex);
@@ -125,7 +125,7 @@ $("html").mousemove(function (e) {
   lastmousey = mousey;
   distortionFx.distortion = xtravel / refreshintvrl;
   pitchShiftFx.pitch = ytravel / refreshintvrl;
-});
+}
 
 // ready?
 window.onload = () => {
@@ -134,4 +134,5 @@ window.onload = () => {
   setAudioTime();
   getAudioMetadata();
   initAudioTone();
+  $("html").mousemove(fxOnMove);
 };
