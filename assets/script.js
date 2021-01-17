@@ -116,6 +116,20 @@ function fxOnMove(e) {
   console.log(xtravel / refreshintvrl, ytravel / refreshintvrl);
 }
 
+// drag image into window
+function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $("#imgpreview").attr("src", e.target.result);
+    };
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
+$("#imgupload").change(function () {
+  readURL(this);
+});
+
 // ready?
 window.onload = () => {
   const md = new MobileDetect(window.navigator.userAgent);

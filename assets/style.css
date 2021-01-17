@@ -33,6 +33,11 @@ body {
   z-index: 6;
 }
 
+#upload-canvas {
+  position: absolute;
+  right: 0;
+}
+
 #footer {
   position: absolute;
   bottom: 0;
