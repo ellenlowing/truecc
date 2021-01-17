@@ -113,22 +113,56 @@ function fxOnMove(e) {
   lastmousey = mousey;
   distortionFx.distortion = xtravel / refreshintvrl;
   pitchShiftFx.pitch = ytravel / refreshintvrl;
-  console.log(xtravel / refreshintvrl, ytravel / refreshintvrl);
+  // console.log(xtravel / refreshintvrl, ytravel / refreshintvrl);
 }
 
 // drag image into window
-function readURL(input) {
-  if (input.files && input.files[0]) {
+const uploadCanvas = document.getElementById("upload-canvas");
+const imgupload = document.getElementById("imgupload");
+["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+  uploadCanvas.addEventListener(eventName, preventDefaults, false);
+});
+function preventDefaults(e) {
+  e.preventDefault();
+  e.stopPropagation();
+}
+
+uploadCanvas.addEventListener("drop", handleDrop, false);
+function handleDrop(e) {
+  let dt = e.dataTransfer;
+  let files = dt.files;
+  readURL(files);
+}
+
+$("#imgupload").change(function () {
+  readURL(this.files);
+});
+
+function readURL(files) {
+  if (files && files[0]) {
     var reader = new FileReader();
     reader.onload = function (e) {
       $("body").css("background", `url("${e.target.result}")`);
     };
-    reader.readAsDataURL(input.files[0]); // convert to base64 string
+    reader.readAsDataURL(files[0]); // convert to base64 string
   }
 }
-$("#imgupload").change(function () {
-  readURL(this);
+
+// drag upload canvas handle highlights
+["dragenter", "dragover"].forEach((eventName) => {
+  uploadCanvas.addEventListener(eventName, highlight, false);
 });
+["dragleave", "drop"].forEach((eventName) => {
+  uploadCanvas.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+  uploadCanvas.classList.add("highlight");
+}
+
+function unhighlight(e) {
+  uploadCanvas.classList.remove("highlight");
+}
 
 // ready?
 window.onload = () => {
