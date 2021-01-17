@@ -36,6 +36,8 @@ body {
 
 #chatango {
   position: absolute;
+  top: 260px;
+  left: 120px;
   width: 600px;
   height: 400px;
   z-index: 5;

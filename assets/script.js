@@ -126,6 +126,7 @@ window.onload = () => {
     $("#taptoplay").on("touchstart", async (e) => {
       Tone.getContext().resume();
       audioel.play();
+      setAudioTime();
       $("#taptoplay").hide();
       $("#metadata").unbind("touchstart");
     });
