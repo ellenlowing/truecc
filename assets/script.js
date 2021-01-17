@@ -122,9 +122,11 @@ window.onload = () => {
   let audioel = document.getElementById("audio-element");
   setAudioTime();
   if (md.mobile()) {
-    $("#metadata").on("touchstart", async (e) => {
+    $("#taptoplay").show();
+    $("#taptoplay").on("touchstart", async (e) => {
       Tone.getContext().resume();
       audioel.play();
+      $("#taptoplay").hide();
       $("#metadata").unbind("touchstart");
     });
   } else {
