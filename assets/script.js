@@ -126,7 +126,6 @@ window.onload = () => {
     $("#taptoplay").on("touchstart", async (e) => {
       Tone.getContext().resume();
       audioel.play();
-      setAudioTime();
       $("#taptoplay").hide();
       $("#metadata").unbind("touchstart");
     });
@@ -134,7 +133,10 @@ window.onload = () => {
     audioel.autoplay = true;
   }
 
-  dragElement(document.getElementById("chatango"));
+  const draggables = document.getElementsByClassName("draggable");
+  for (let drag of draggables) {
+    dragElement(drag);
+  }
   $("#mute-btn").on("click", toggleMuteAudio);
   getAudioMetadata();
   initAudioTone();
